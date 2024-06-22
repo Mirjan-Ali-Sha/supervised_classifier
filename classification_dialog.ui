@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ClassificationDialog</class>
+ <widget class="QDialog" name="ClassificationDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Supervised Classification</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Input Image:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="image_path"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="image_browse_button">
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Reference Shapefile (Optional for Pre-trained Model):</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="shapefile_path"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="shapefile_browse_button">
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Output Folder:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="output_folder"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="output_browse_button">
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Select Label Field:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="label_field_combo"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Classification Method:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="classification_methods">
+      <item>
+        <property name="text">
+          <string>Random Forest</string>
+        </property>
+      </item>
+      <item>
+        <property name="text">
+          <string>SVM</string>
+        </property>
+      </item>
+      <item>
+        <property name="text">
+          <string>KNN</string>
+        </property>
+      </item>
+      <item>
+        <property name="text">
+          <string>Minimum Distance</string>
+        </property>
+      </item>
+    </widget>
+   </item>
+   <!-- <item>
+    <widget class="QCheckBox" name="use_pretrained_model">
+     <property name="text">
+      <string>Use Pre-trained Model</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="pretrained_model_path"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pretrained_model_browse_button">
+     <property name="text">
+      <string>Browse</string>
+     </property>
+    </widget>
+   </item> -->
+   <item>
+    <widget class="QLabel" name="model_info_label"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="open_in_qgis">
+     <property name="text">
+      <string>Do you want to open output in QGIS Interface?</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="classify_button">
+     <property name="text">
+      <string>Classify</string>
+     </property>
+    </widget>
+   </item>
+   <!-- <item>
+    <widget class="QPushButton" name="retrain_button">
+     <property name="text">
+      <string>Re-train Existing Model</string>
+     </property>
+    </widget>
+   </item> -->
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
