@@ -1,4 +1,4 @@
-# supervised_classifier
+# Supervised Classifier
 A plugin to classify selected raster file with reference
 The Supervised Classifier Plugin for QGIS is a powerful tool designed to facilitate the classification of satellite images using unsupervised learning algorithms. 
 This plugin provides an easy-to-use interface for loading satellite images and selecting from a variety of supervised classification methods, including "Minimum Distance", "Random Forest", "SVM" and KNN (right now KNN algorithm not working properly, I'm working on it). Also working on "Maximum Likelihood" algorithm as well.
