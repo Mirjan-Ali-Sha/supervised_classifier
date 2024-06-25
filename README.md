@@ -19,4 +19,5 @@ This plugin is ideal for remote sensing professionals, GIS analysts, and researc
 ** **Note:** After installation make sure the following points; 
 1. Check Mark the Installed plugins (under 'Manage and Install Plugins...' menu) 
 2. Check Mark __'MAS Raster Processing'__ toolbar (by right click on toolbar).
-Fixed the Issues: [ModuleNotFoundError: No module named 'sklearn' #1](https://github.com/Mirjan-Ali-Sha/supervised_classifier/issues/1)
+** Fixed the Issues (if get errors like below): 
+[ModuleNotFoundError: No module named 'sklearn' #1](https://github.com/Mirjan-Ali-Sha/supervised_classifier/issues/1)
