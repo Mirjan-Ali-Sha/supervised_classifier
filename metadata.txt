@@ -5,12 +5,15 @@
 [general]
 name=Supervised Classifier
 qgisMinimumVersion=3.0
-description=A plugin to classify selected raster file with reference
-version=0.1
+description=A plugin to classify a selected raster file with reference. The Supervised Classifier Plugin for QGIS is a powerful tool that facilitates the classification of satellite images using supervised learning algorithms.
+version=1.0.1
 author=Mirjan Ali Sha
 email=mastools.help@gmail.com
 
-about=A plugin to classify selected raster file with reference
+about=Supervised Classifier: A plugin to classify selected raster file with reference or pre-trained models. The Supervised Classifier Plugin for QGIS is a powerful tool designed to facilitate the classification of satellite images using supervised learning algorithms. This plugin provides an easy-to-use interface for loading satellite images and selecting from a variety of supervised classification methods, including "Minimum Distance", "Random Forest", "SVM" and "KNN". Also working on "Maximum Likelihood" algorithm as well.  Key Features: - User-Friendly Interface with Batch Processing - Multiple Classification Algorithms (Random Forest, SVM, KNN, Minimum Distance) - Pre-trained Model Support - Classify multiple rasters using saved models - Band Selection - Choose specific bands for classification - Multiple Label Field Support - Handle complex reference shapefiles - Model Saving & Export - Save trained models with detailed info files - Label Mapping Export - Export classification labels as CSV/JSON - Progress Tracking & Error Handling - Seamless QGIS Integration This plugin is ideal for remote sensing professionals, GIS analysts, and researchers looking to perform efficient and accurate supervised classification of satellite imagery within the QGIS environment. To use this Tool follow the below steps: 1. Click on the tool or choose "Raster" menu --> "MAS** Raster Processing" menu item --> "Supervised Classifier" option. 2. Select 'Stack Image' or Image as Input and select output folder name. 3. Select classification method. 4. Adjust all parameters according to your needs. Select the field of the Reference Shapefile which has the labels for the classification and check mark on "Want to save the trained model?"  if you wants save the trained model (except "Minimum Distance" model). Select the "No of Iterations:" to trained the model (except "Minimum Distance" model). 5. Decide do you wants to open the output or not. 6. Click on "Classify" button.  Follow the below steps for Version >= 1.0.0: **Training New Model Mode:** 1. Open the tool: Raster menu → "MAS Raster Processing" → "Supervised Classifier" 2. Keep "Do you want to use a pre-trained model?" unchecked 3. Select input rasters from the table or add new ones using "Add Raster from File" 4. Select reference shapefiles and choose label fields using "Select Label Fields" button 5. Choose output folder (or check "Save output in same folder as input?") 6. Select classification method (Random Forest, SVM, KNN, or Minimum Distance) 7. Check "Wants to save trained model?" to save the model for future use 8. Set "No of Iterations" for training (except Minimum Distance) 9. Optionally check "Do you want to open output in QGIS Interface?" 10. Click "Classify" button 11. View label mappings dialog and export if needed  **Pre-trained Model Mode:**  1. Open the tool and check "Do you want to use a pre-trained model?" 2. Select input rasters from the table 3. Add pre-trained model files (.pkl) using "Add Model from File" button 4. If multiple models selected, confirm the warning about total output files 5. Choose output folder 6. Optionally check "Do you want to open output in QGIS Interface?" 7. Click "Classify" button 8. Check model info files for label mapping details **Note: After installation make sure the following points:**  1. Check Mark the Installed plugins (under 'Manage and Install Plugins...' menu)  2. Check Mark 'MAS Raster Processing' toolbar (by right click on toolbar)  3. For pre-trained models, ensure the model info file (.txt) exists in the same folder as the model file (.pkl)  Issues (please take a look): [ModuleNotFoundError: No module named 'sklearn' #1](https://github.com/Mirjan-Ali-Sha/supervised_classifier/issues/1)  For more details, please visit 'homepage'.
+
+
+
 
 tracker=https://github.com/Mirjan-Ali-Sha/supervised_classifier/issues
 repository=https://github.com/Mirjan-Ali-Sha/supervised_classifier
@@ -20,10 +23,10 @@ repository=https://github.com/Mirjan-Ali-Sha/supervised_classifier
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=1. Improved UI or UX; 2. Supporting Multiple label columns; 3. Support Batch Processing.
 
 # Tags are comma separated with spaces allowed
-tags=remote sensing, raster, processing, image classification, supervised classification
+tags=remote sensing, raster, processing, image classification, supervised classification, supervised, classification, image classification
 
 homepage=https://github.com/Mirjan-Ali-Sha/supervised_classifier/wiki
 category=Raster
