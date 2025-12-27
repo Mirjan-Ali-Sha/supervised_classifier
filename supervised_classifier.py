@@ -15,23 +15,32 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (QAction, QMessageBox, QToolBar, QDialog, QVBoxLayout, 
                                  QHBoxLayout, QTableWidget, QTableWidgetItem, QPushButton,
                                  QFileDialog, QHeaderView, QLabel)
-from .classification_dialog import ClassificationDialog
-from osgeo import ogr, gdal
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import LabelEncoder
-from scipy.spatial.distance import cdist
-import numpy as np
 from qgis.core import QgsRasterLayer, QgsProject
 import os
-import subprocess
 import sys
-import joblib
 from .resources_rc import *
 import time
-import pandas as pd
 import json
+
+# Flag to track if dependencies are available
+DEPENDENCIES_AVAILABLE = False
+
+# Try to import required packages
+try:
+    from .classification_dialog import ClassificationDialog
+    from osgeo import ogr, gdal
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.svm import SVC
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.preprocessing import LabelEncoder
+    from scipy.spatial.distance import cdist
+    import numpy as np
+    import joblib
+    import pandas as pd
+    DEPENDENCIES_AVAILABLE = True
+except ImportError:
+    # Dependencies not available - will be handled in __init__
+    pass
 
 
 class LabelMappingDialog(QDialog):
@@ -128,6 +137,16 @@ class LabelMappingDialog(QDialog):
 
 class SupervisedClassification:
     """QGIS Plugin Implementation."""
+    
+    # Required packages: {pip_package_name: import_module_name}
+    REQUIRED_PACKAGES = {
+        'scikit-learn': 'sklearn',
+        'scipy': 'scipy',
+        'numpy': 'numpy',
+        'pandas': 'pandas',
+        'joblib': 'joblib'
+    }
+    
     def __init__(self, iface):
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
@@ -135,7 +154,95 @@ class SupervisedClassification:
         self.menu = self.tr(u'&MAS Raster Processing')
         self.toolbar = None
         self.first_start = None
-        self.install_required_packages()
+        self.dependencies_ok = DEPENDENCIES_AVAILABLE
+        # Dependencies are checked when user clicks the plugin, not at startup
+
+    def _check_and_install_dependencies(self):
+        """Check and install missing dependencies using the robust installer"""
+        try:
+            from .dependency_installer import DependencyInstaller
+            
+            installer = DependencyInstaller(self.iface, self.REQUIRED_PACKAGES)
+            installer.PLUGIN_NAME = "Supervised Classifier"
+            
+            if installer.check_and_install(silent_if_ok=True):
+                # Dependencies installed successfully - try to reload them
+                if self._reload_dependencies():
+                    self.dependencies_ok = True
+                    QMessageBox.information(
+                        self.iface.mainWindow(),
+                        "Ready to Use",
+                        "Dependencies installed successfully!\n\n"
+                        "The plugin is now ready to use."
+                    )
+                else:
+                    # Reload failed - need restart
+                    self.dependencies_ok = False
+            else:
+                self.dependencies_ok = False
+        except Exception as e:
+            from qgis.core import Qgis, QgsMessageLog
+            QgsMessageLog.logMessage(
+                f"Failed to check dependencies: {str(e)}",
+                "Supervised Classifier",
+                Qgis.Warning
+            )
+            self.dependencies_ok = False
+    
+    def _reload_dependencies(self):
+        """
+        Try to reload/import all required dependencies after installation.
+        Returns True if all imports succeed, False otherwise.
+        """
+        global DEPENDENCIES_AVAILABLE
+        global ClassificationDialog, ogr, gdal
+        global RandomForestClassifier, SVC, KNeighborsClassifier, LabelEncoder
+        global cdist, np, joblib, pd
+        
+        try:
+            # Import all required modules
+            from .classification_dialog import ClassificationDialog as CD
+            from osgeo import ogr as _ogr, gdal as _gdal
+            from sklearn.ensemble import RandomForestClassifier as RFC
+            from sklearn.svm import SVC as _SVC
+            from sklearn.neighbors import KNeighborsClassifier as KNC
+            from sklearn.preprocessing import LabelEncoder as LE
+            from scipy.spatial.distance import cdist as _cdist
+            import numpy as _np
+            import joblib as _joblib
+            import pandas as _pd
+            
+            # Update global references
+            ClassificationDialog = CD
+            ogr = _ogr
+            gdal = _gdal
+            RandomForestClassifier = RFC
+            SVC = _SVC
+            KNeighborsClassifier = KNC
+            LabelEncoder = LE
+            cdist = _cdist
+            np = _np
+            joblib = _joblib
+            pd = _pd
+            
+            DEPENDENCIES_AVAILABLE = True
+            
+            from qgis.core import Qgis, QgsMessageLog
+            QgsMessageLog.logMessage(
+                "Successfully reloaded all dependencies",
+                "Supervised Classifier",
+                Qgis.Success
+            )
+            return True
+            
+        except ImportError as e:
+            from qgis.core import Qgis, QgsMessageLog
+            QgsMessageLog.logMessage(
+                f"Failed to reload dependencies: {str(e)}",
+                "Supervised Classifier",
+                Qgis.Warning
+            )
+            return False
 
     def tr(self, message):
         return QCoreApplication.translate('SupervisedClassification', message)
@@ -173,16 +280,18 @@ class SupervisedClassification:
         if self.toolbar:
             del self.toolbar
 
-    def install_required_packages(self):
-        try:
-            import numpy
-            import scipy
-            import sklearn
-        except ImportError:
-            requirements_path = os.path.join(self.plugin_dir, 'requirements.txt')
-            subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', requirements_path])
-
     def run(self):
+        # Check if dependencies are available
+        if not self.dependencies_ok:
+            # Try to reload dependencies first (they might have been installed)
+            if self._reload_dependencies():
+                self.dependencies_ok = True
+            else:
+                # Still not available - prompt for installation
+                self._check_and_install_dependencies()
+                if not self.dependencies_ok:
+                    return
+        
         self.show_classification_dialog()
 
     def show_classification_dialog(self):
